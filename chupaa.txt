@@ -1,0 +1,286 @@
+experiment 1:-design and Develop SQL DDL statements which demonstrate the use of SQL objects such as 
+Table, View, Index, Sequence, Synonym.
+--auto increment 
+create table student(id int, name varchar(10), city varchar(10));
+insert into student values(1,'Upendra','Pune');
+alter table student modify id int Primary Key;
+alter table student modify id int auto_increment;
+insert into student (name,city) values('Rohit','mumbai');
+insert into student (name,city) values('Piyush','pcmc');
+select * from student;
+
+--view
+create view view1 as select name from student;
+select * from view1;
+create view view2 as select * from student where city='Pune';
+
+--index
+create unique index stud_index on student(id);
+show index from student;
+drop index stud_index on student;
+
+
+experiment 2:-Design at least 10 SQL queries for suitable database application using SQL DML statements: 
+Insert, Select, Update, Delete with operators, functions, and set operator. 
+
+create database experiment
+use experiment
+create table emp(emp_id int primary key auto_increment, emp_fname varchar(10) not null,emp_lname varchar(10) not null,emp_salary int, join_date date);
+insert into emp values(1,'abc','def',20,'2022-6-10');
+insert into emp values(2,'pqr','stu',30,'2022-6-11');
+insert into emp values(3,'xyz','zyx',40,'2022-6-12');
+select*from emp;
+update emp set emp_salary='50' where emp_id=3;
+delete from emp where emp_id=3;
+insert into emp values(3,'xyz','zyx',40,'2022-6-12');
+select avg(emp_salary) from emp;
+select concat(emp_fname,emp_lname) from emp where emp_salary in (select max(emp_salary)from emp);
+select upper(concat(emp_fname,emp_lname)) from emp where emp_salary in (select max(emp_salary)from emp);
+
+
+
+experiment 3:- Design at least 10 SQL queries for suitable database application using SQL DML statements: all 
+types of Join, Sub-Query and View
+student table has roll name address phone age
+student course has course id and roll 
+
+-inner join 
+
+SELECT StudentCourse.COURSE_ID, Student.NAME, Student.AGE FROM Student
+INNER JOIN StudentCourse
+ON Student.ROLL_NO = StudentCourse.ROLL_NO;
+
+
+-left join
+SELECT Student.NAME,StudentCourse.COURSE_ID 
+FROM Student
+LEFT JOIN StudentCourse 
+ON StudentCourse.ROLL_NO = Student.ROLL_NO;
+
+-right join:-
+SELECT Student.NAME,StudentCourse.COURSE_ID 
+FROM Student
+RIGHT JOIN StudentCourse 
+ON StudentCourse.ROLL_NO = Student.ROLL_NO;
+
+-full join
+SELECT Student.NAME,StudentCourse.COURSE_ID 
+FROM Student
+FULL JOIN StudentCourse 
+ON StudentCourse.ROLL_NO = Student.ROLL_NO;
+
+
+-eg of sub query
+Select NAME, LOCATION, PHONE_NUMBER from DATABASE 
+WHERE ROLL_NO IN
+(SELECT ROLL_NO from STUDENT where SECTION=’A’); 
+
+
+-eg of view
+CREATE VIEW DetailsView AS
+SELECT NAME, ADDRESS
+FROM StudentDetails
+WHERE S_ID < 5;
+
+
+
+
+
+
+experiment4:-Write a PL/SQL block of code using parameterized Cursor that will merge the data available in the newly created table 
+N_RollCall with the data available in the table O_RollCall. 
+If the data in the first table already exist in the second table then that data should be skipped.--------
+create database assi7;
+use assi7;
+show tables;
+create table old_roll(roll int,name varchar(10));
+create table new_roll(roll int,name varchar(10));
+insert into old_roll values(4,'d');
+insert into old_roll values(3,'bcd');
+insert into old_roll values(1,'bc');
+insert into old_roll values(5,'bch');
+insert into new_roll values(2,'b');
+insert into new_roll values(5,'bch');
+insert into new_roll values(1,'bc');
+
+select * from old_roll;
+select * from new_roll;
+delimiter $
+create procedure roll_list()
+begin
+declare oldrollnumber int;
+declare oldname varchar(10);
+declare newrollnumber int;
+declare newname varchar(10);
+declare done int default false;
+declare c1 cursor for select roll,name from old_roll;
+declare c2 cursor for select roll,name from new_roll;
+declare continue handler for not found set done=true;
+open c1;
+loop1:loop
+fetch c1 into oldrollnumber,oldname;
+if done then
+leave loop1;
+end if;
+open c2;
+
+loop2:loop
+fetch c2 into newrollnumber,newname;
+if done then
+insert into new_roll values(oldrollnumber,oldname);
+set done=false;
+close c2;
+leave loop2;
+end if;
+if oldrollnumber=newrollnumber then
+leave loop2;
+end if;
+end loop;
+end loop;
+close c1;
+end $
+delimiter ;
+call roll_list();
+select * from new_roll;
+
+-----
+
+Title : Study of Open Source NOSQL Database: MongoDB (Installation, Basic 
+CRUD operations, Execution)
+
+
+> use Abhi;
+> db.createCollection('Student');
+> db.Student.insert({'Rno':'1','Name':'Piyush','Class':'TE COMP'});
+> db.Student.insert({'Rno':'2','Name':'Abhi','Class':'TE COMP'});
+> db.Student.insert({'Rno':'3','Name':'Ashley','Class':'TE COMP'});
+> db.Student.insert({'Rno':'4','Name':'Hitesh','Class':'TE COMP'});
+> db.Student.insert({'Rno':'5','Name':'Pratik','Class':'TE COMP'});
+> db.Student.insert({'Rno':'6','Name':'Pratik','Class':'TE COMP'});
+> db.Student.find();
+> db.Student.find().pretty();
+
+> show dbs;
+> db.Student.update({'Name':'Hitesh'},{$set:
+> db.Student.find().pretty();
+> db.Student.remove({'ADD':'MP'});
+> db.Student.find().pretty();
+> db.Student.remove({'Name':'Pratik'},1);
+> db.Student.remove({'Name':'Pratik'},1);
+> db.Student.find().pretty();
+> db.Student.drop();
+> db.Student.find().pretty();
+
+--------------------------------------------------------------------------------------------
+
+Title : Design and Develop MongoDB Queries using CRUD operations. (Use 
+CRUD operations, SAVE method, logical operators)
+
+
+> use Abhi;
+> db.createCollection('Student');
+> db.Student.insert({'Rno':'1','Name':'Piyush','Class':'TE COMP'});
+> db.Student.insert({'Rno':'2','Name':'Abhi','Class':'TE COMP'});
+> db.Student.insert({'Rno':'3','Name':'Ashley','Class':'TE COMP'});
+> db.Student.insert({'Rno':'4','Name':'Hitesh','Class':'TE COMP'});
+> db.Student.insert({'Rno':'5','Name':'Pratik','Class':'TE COMP'});
+> db.Student.insert({'Rno':'6','Name':'Pratik','Class':'TE COMP'});
+> db.Student.find();
+> db.Student.find().pretty();
+
+> db.Student.update({'Name':'Hitesh'},{$set: {'Name':'Henry'}});
+> db.Student.find().pretty();
+> db.Student.remove({'ADD':'MP'});
+> db.Student.find().pretty();
+> db.Student.save({_id:ObjectId("5b8fad4ef00832a0a50b5036"),"RNO":"1","NAME":"PIYUSH","CLASS":"TE COMP","ADD":"MP"});
+> db.Student.find().pretty();
+> db.Student.find({$and:[{"Name":"Piyush"},{"Rno":"2"}]});
+> db.Student.find({$and:[{"Name":"Piyush"},{"Rno":"1"}]}).pretty();
+> db.Student.find({$and:[{"Name":"Piyush"},{"Rno":"2"}]}).pretty();
+> db.Student.find({$or:[{"Name":"Piyush"},{"Rno":"2"}]}).pretty();
+> db.Student.find({$or:[{"Name":"Piyush"},{"Class":"TE COMP"}]}).pretty();
+> db.Student.find({$nor:[{"Name":"Piyush"},{"Class":"TE COMP"}]}).pretty();
+> db.Student.find({$nor:[{"Name":"Piyush"}, {"Rno":"2"}]}).pretty();
+> db.Student.find( {"Rno": { $not:{$lt:"3"}}}).pretty();
+> db.Student.find( {"Rno": { $eq:"5"}}).pretty();
+> db.Student.find( {"Rno": { $gt:"5"}}).pretty();
+> db.Student.find( {"Rno": { $lt:"5"}}).pretty();
+> db.Student.find( {"Rno": { $lte:"5"}}).pretty();
+> db.Student.find( {"Rno": { $lt:"5",$gt:"2"}}).pretty();
+> db.Student.find( {"Rno": { $lte:"5",$gte:"2"}}).pretty();
+> db.Student.find( {"Rno": { $lte:"5",$gt:"2"}}).pretty();
+> db.Student.find( {"Rno": { $lt:"5",$gte:"2"}}).pretty();
+
+--------------------------------------------------------------------------------------------
+
+Title :Implement aggregation and indexing with suitable example using 
+MongoDB
+
+
+> use comp;
+> db.createCollection('website');
+> db.website.insert({'roll':'1','name':'harsh','amount':1000,'url':'www.yahoo.com'});WriteResult({ "nInserted" : 1 })
+>db.website.insert({'roll':'2','name':'jitesh','amount':2000,'url':'www.yahoo.com'});WriteResult({ "nInserted" : 1 })
+>db.website.insert({'roll':'3','name':'rina','amount':3000,'url':'www.google.com'});WriteResult({ "nInserted" : 1 })
+>db.website.insert({'roll':'4','name':'ash','amount':4000,'url':'www.gmail.com'});WriteResult({ "nInserted" : 1 })
+>db.website.insert({'roll':'5','name':'ash','amount':1000,'url':'www.pvg.com'});WriteResult({ "nInserted" : 1 })
+
+> db.website.aggregate({$group:{_id:"$name","total":{$sum:"$amount"}}});
+> db.website.aggregate({$group:{_id:"$name","total":{$avg:"$amount"}}});
+> db.website.aggregate({$group:{_id:"$name","total":{$min:"$amount"}}});
+> db.website.aggregate({$group:{_id:"$name","total":{$max:"$amount"}}});
+> db.website.aggregate({$group:{_id:"$name","total":{$first:"$amount"}}});
+> db.website.aggregate({$group:{_id:"$name","total":{$last:"$amount"}}});
+> db.website.aggregate({$group:{_id:"$name","total":{$push:"$amount"}}});
+> db.website.aggregate({$group:{_id:"$name","total": {$sum:1}}});
+> db.website.aggregate({$group:{_id:"$name","total"{$addToSet:"$amount"}}});
+
+> db.createCollection('website1');
+> db.website1.insert({'r':1,'name':'harsh'});
+> db.website1.find().pretty()
+
+> db.website1.createIndex({'name':1})
+
+> db.website1.createIndex({'name':-1})
+> db.website1.getIndexses()
+> db.website1.getIndexes()
+> db.website1.createIndex({'name':-1})
+
+> db.website.dropIndex({'name':-1})
+> db.website1.dropIndex({'name':1}){ "nIndexesWas" : 2, "ok" : 1 }
+> db.website1.dropIndex({'name':1})
+
+> db.website1.getIndexes()
+> db.website1.find().pretty()
+> db.website1.createIndex({'name':1})
+> db.website1.getIndexes()[
+> db.website1.dropIndex({'name':1}){ "nIndexesWas" : 2, "ok" : 1 }
+> db.website1.getIndexes()
+> db.website1.createIndex({'name':1,'r':-1})
+> db.website1.getIndexes()
+] (i-search)`db.website1.insert({'roll':1,'name':'harsh'});':
+
+--------------------------------------------------------------------------------------------
+
+Title :Implement Map reduces operation with suitable example using MongoDB
+
+
+> use Abhi
+> db.createCollection('Journal');{ "ok" : 1 }
+> db.Journal.insert({'book_id':1,'book_name':'JavacdOOP','amt':500,'status':'Available'});
+> db.Journal.insert({'book_id':1,'book_name':'JavaOOP','amt':400,'status':'Not Available'});
+> db.Journal.insert({'book_id':1,'book_name':'Java','amt':300,'status':'Not Available'});
+> db.Journal.insert({'book_id':2,'book_name':'Java','amt':300,'status':'Available'});
+> db.Journal.insert({'book_id':2,'book_name':'OPP','amt':200,'status':'Available'});
+> db.Journal.insert({'book_id':2,'book_name':'C+','amt':200,'status':'Available'});
+> db.Journal.insert({'book_id':3,'book_name':'C+','amt':150,'status':'Available'});
+> db.Journal.insert({'book_id':3,'book_name':'C++','amt':200,'status':'Not Available'});
+> db.Journal.insert({'book_id':4,'book_name':'OPP C++','amt':300,'status':'Not Available'});
+> db.Journal.insert({'book_id':5,'book_name':'OPP C++','amt':400,'status':'Available'});
+> db.Journal.insert({'book_id':5,'book_name':'C++','amt':400,'status':'Available'});
+> db.Journal.insert({'book_id':5,'book_name':'C++Java','amt':400,'status':'Not Available'});
+> var mapfunction=function(){ emit(this.book_id,this.amt)};
+> var reducefunction=function(key,value){return Array.sum(value);};
+> db.Journal.mapReduce(mapfunction,reducefunction,{'out':'new'});
+> db.Journal.mapReduce(mapfunction,reducefunction,{'out':'new'}).find().pretty();
+> db.new.find().pretty();
