@@ -385,3 +385,31 @@ close c1;
 
 end;
 /
+
+--plsql 3
+
+
+select * from O_rollcall;
+
+create table N_rollcall(rno int(3),name varchar(20), addr varchar(30));
+
+Delimiter //
+CREATE PROCEDURE newcur1(IN rno1 int)
+    BEGIN
+        DECLARE rno2 int;
+        DECLARE exit_loop BOOLEAN;
+        DECLARE c1 CURSOR FOR SELECT rno FROM O_rollcall where rno=rno1;
+        DECLARE CONTINUE HANDLER FOR NOT FOUND SET exit_loop = TRUE;
+        OPEN c1;
+        emp_loop: LOOP
+            FETCH c1 INTO rno2;
+            If not exists(select * from N_rollcall where rno=rno2) then
+                insert into N_rollcall select * from O_rollcall where rno=rno2;
+            End If;
+            IF exit_loop THEN
+                CLOSE c1;
+                LEAVE emp_loop;
+            END IF;
+        END LOOP emp_loop;
+    END
+//
