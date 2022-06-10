@@ -336,3 +336,52 @@ schema
     foreign KEY(cust_no) REFERENCES Customer(cust_no),
     FOREIGN KEY(ISBN) REFERENCES Books(ISBN)
   );
+  
+  
+  ------- plsql 2
+  
+  create table OLD1(roll int,name varchar(10));
+create table NR(roll int,name varchar(10));
+insert into OLD1 values(4,'A');
+insert into OLD1 values(3,'BCD');
+insert into OLD1 values(1,'K');
+insert into OLD1 values(5,'RJ');
+insert into NR values(2,'P');
+insert into NR values(5,'RJ');
+insert into NR values(1,'ABV');
+DELETE FROM OLD1 WHERE roll=3;
+select*from OLD1;
+select*from NR;
+
+DECLARE
+oldrollnumber int;
+oldname varchar(10);
+newrollnumber int;
+newname varchar(10);
+cursor c1 is select roll, name from OLD1;
+cursor c2 is select roll,name from NR;
+
+BEGIN
+open c1;
+loop
+fetch c1 into oldrollnumber,oldname;
+EXIT WHEN c1%notfound;
+dbms_output.put_line(oldrollnumber||''||newname);
+end if;
+END LOOP;
+
+open c2;
+loop
+fetch c2 into newrollnumber,newname;
+EXIT WHEN c2%notfound;
+if newrollnumber!=oldrollnumber
+then
+dbms_output.put_line(newrollnumber||''||newname);
+end if;
+END LOOP;
+
+close c2;
+close c1;
+
+end;
+/
