@@ -284,3 +284,55 @@ Title :Implement Map reduces operation with suitable example using MongoDB
 > db.Journal.mapReduce(mapfunction,reducefunction,{'out':'new'});
 > db.Journal.mapReduce(mapfunction,reducefunction,{'out':'new'}).find().pretty();
 > db.new.find().pretty();
+
+--------
+schema
+
+  CREATE TABLE Customer(
+    cust_no int,
+    cust_fname varchar(255) not null,
+    cust_lname varchar(255) not null,
+    cust_company varchar(255) not null,
+    cust_addr varchar(255) not null,
+    city varchar(255) not null,
+    cust_phone varchar(11)  not null,
+    PRIMARY KEY(cust_no)
+  );
+
+  CREATE TABLE Author(
+    author_no Int not null,
+    author_name varchar(255) not null,
+    country varchar(255) not null,
+    PRIMARY KEY(author_no)
+  );
+
+  CREATE TABLE Publisher(
+    publisher_no INT not null,
+    publisher_name varchar(255) not null,
+    publisher_addr varchar(255) not null,
+    year int not null,
+    PRIMARY KEY(publisher_no)
+  );
+
+  CREATE TABLE Books(
+    ISBN VARCHAR(255) not null,
+    title VARCHAR(255) not null,
+    unit_price float not null,
+    author_no INT not null,
+    publisher_no int not null,
+    pub_year int not null,
+    primary KEY(ISBN),
+    FOREIGN key(author_no) REFERENCES Author(author_no) ON DELETE CASCADE,
+    FOREIGN key(publisher_no) REFERENCES Publisher(publisher_no) ON DELETE CASCADE
+  );
+
+  CREATE TABLE Orders(
+    order_no int not null,
+    cust_no int not null,
+    ISBN VARCHAR(255) not null,
+    qty int not null,
+    odate varchar(255) not null,
+    PRIMARY key(order_no),
+    foreign KEY(cust_no) REFERENCES Customer(cust_no),
+    FOREIGN KEY(ISBN) REFERENCES Books(ISBN)
+  );
